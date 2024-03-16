@@ -13,7 +13,11 @@ public class ParkinControlApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ParkinControlApplication.class,args);
 	}
-	@GetMapping("/")
+}
+
+@RestController
+class MyControler{
+	@GetMapping("/hello")
 	public String index(){
 		return "Olá mundo!!!";
 	}
