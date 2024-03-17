@@ -10,5 +10,7 @@ import java.util.UUID;
 //Jpa, possui metodos prontos para transação com o banco de dados.
 @Repository //Não é necessário, pois o Jpa já vem com essa anotação.
 public interface ParkingSpotRepository extends JpaRepository<ParkingSpotModel, UUID> {
-
+     boolean existsByLicensePlateCar(String licensePlateCar);
+     boolean existsByParkingSpotNumber(String parkingSpotNumber);
+     boolean existsByApartmentAndBlock(String apartment, String block);
 }
