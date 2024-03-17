@@ -5,6 +5,10 @@ import com.api.parkincontrol.repositories.ParkingSpotRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 
 //Bean da Spring
 @Service //Como é uma camada de serviço, utiliza essa anotação.
@@ -42,5 +46,13 @@ Dessa forma, ao inves do controler solicitar direto para o repository, o control
 
     public boolean existsByApartmentAndBlock(String apartment, String block) {
         return  parkingSpotRepository.existsByApartmentAndBlock(apartment,block);
+    }
+
+    public List<ParkingSpotModel> findAll() {
+        return  parkingSpotRepository.findAll();//retorna a listagem completa de ParkingSpotModel
+    }
+
+    public Optional<ParkingSpotModel> findById(UUID id) {
+        return parkingSpotRepository.findById(id);
     }
 }

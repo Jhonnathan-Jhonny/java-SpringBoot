@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 // Bean do spring
 @RestController //Notação pronta do controlador
@@ -52,5 +55,26 @@ public class ParkingSpotController {
         //não tem todos os atributos necessários, apenas os que o cliente informa.
         parkingSpotModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC"))); // Data de registro sendo setada e salvando em UTC
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingSpotService.save(parkingSpotModel)); //Retorno, onde está criando e salvando as informações
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ParkingSpotModel>> getAllParkingSpots(){
+        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.findAll());
+    }
+
+    @GetMapping("/{id}")//Passado o id para a URI fica da seguinte forma: parking-spot/"id(numeros aleatórios)"
+    //ResponseEntity do tipo objeto e pode ser vazio.
+    //@PathVariable - Utilizado para obter a variavel do URI
+    // (value = "id") -> Passa o mesmo nome que está entre as chaves do GETMAPPING
+    //UID -> tipo
+    public ResponseEntity<Object> getOneParkingSpot(@PathVariable(value = "id") UUID id){
+        Optional<ParkingSpotModel> parkingSpotModelOptional = parkingSpotService.findById(id); //Buscando o recurso na base de dados
+        //findById -> Busca o elemento e retorna um optional de ParkingSpotModel
+        if (!parkingSpotModelOptional.isPresent()) {// Se o parkingSpotModelOptional não estiver presente retorna mensagem de erro
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking Spot not found.");
+        }
+        // caso esteja, retorna o parkingSpotModelOptional
+        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotModelOptional.get());
+        //.get -> Utilizado para objter o model do optional.
     }
 }
