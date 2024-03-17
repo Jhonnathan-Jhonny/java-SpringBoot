@@ -55,4 +55,9 @@ Dessa forma, ao inves do controler solicitar direto para o repository, o control
     public Optional<ParkingSpotModel> findById(UUID id) {
         return parkingSpotRepository.findById(id);
     }
+
+    @Transactional //Metodo destrutivo, e assim, garante se tiver algo erro tenha o RowBack
+    public void delete(ParkingSpotModel parkingSpotModel) {
+        parkingSpotRepository.delete(parkingSpotModel);
+    }
 }

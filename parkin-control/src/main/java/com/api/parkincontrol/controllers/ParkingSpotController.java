@@ -69,12 +69,22 @@ public class ParkingSpotController {
     //UID -> tipo
     public ResponseEntity<Object> getOneParkingSpot(@PathVariable(value = "id") UUID id){
         Optional<ParkingSpotModel> parkingSpotModelOptional = parkingSpotService.findById(id); //Buscando o recurso na base de dados
-        //findById -> Busca o elemento e retorna um optional de ParkingSpotModel
+        //findById -> Busca o elemento e retorna um optional de ParkingSpotModel. Criado na classe de serviço
         if (!parkingSpotModelOptional.isPresent()) {// Se o parkingSpotModelOptional não estiver presente retorna mensagem de erro
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking Spot not found.");
         }
         // caso esteja, retorna o parkingSpotModelOptional
         return ResponseEntity.status(HttpStatus.OK).body(parkingSpotModelOptional.get());
         //.get -> Utilizado para objter o model do optional.
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteParkingSpot(@PathVariable(value = "id") UUID id){
+        Optional<ParkingSpotModel> parkingSpotModelOptional = parkingSpotService.findById(id);
+        if (!parkingSpotModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking Spot not found.");
+        }
+        parkingSpotService.delete(parkingSpotModelOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Parking Spot deleted successfully.");
     }
 }
