@@ -87,4 +87,34 @@ public class ParkingSpotController {
         parkingSpotService.delete(parkingSpotModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Parking Spot deleted successfully.");
     }
+
+    //Método para atualizar os campos
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id,
+                                                    @RequestBody @Valid ParkingSpotDto parkingSpotDto){
+        Optional<ParkingSpotModel> parkingSpotModelOptional = parkingSpotService.findById(id);
+        if (!parkingSpotModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking Spot not found.");
+        }
+        //O id e a data de cadastro continua a mesma.
+
+        //Forma 1
+//        var parkingSpotModel1 = parkingSpotModelOptional.get();
+//        parkingSpotModel1.setParkingSpotNumber(parkingSpotDto.getParkingSpotNumber());
+//        parkingSpotModel1.setLicensePlateCar(parkingSpotDto.getLicensePlateCar());
+//        parkingSpotModel1.setModelCar(parkingSpotDto.getModelCar());
+//        parkingSpotModel1.setBrandCar(parkingSpotDto.getBrandCar());
+//        parkingSpotModel1.setColorCar(parkingSpotDto.getColorCar());
+//        parkingSpotModel1.setResponsibleName(parkingSpotDto.getResponsibleName());
+//        parkingSpotModel1.setApartment(parkingSpotDto.getApartment());
+//        parkingSpotModel1.setBlock(parkingSpotDto.getBlock());
+
+        //Forma 2
+        var parkingSpotModel = new ParkingSpotModel(); //Cria uma nova instância
+        BeanUtils.copyProperties(parkingSpotDto, parkingSpotModel); //Faz a conerção como foi feito no metodo POST
+        parkingSpotModel.setId(parkingSpotModelOptional.get().getId()); //Seta o ID
+        parkingSpotModel.setRegistrationDate(parkingSpotModelOptional.get().getRegistrationDate()); // E a data que estão salvos no banco de dados e o resto será atualizado
+
+        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.save(parkingSpotModel));
+    }
 }
