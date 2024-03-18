@@ -3,6 +3,8 @@ package com.api.parkincontrol.services;
 import com.api.parkincontrol.models.ParkingSpotModel;
 import com.api.parkincontrol.repositories.ParkingSpotRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,8 +50,9 @@ Dessa forma, ao inves do controler solicitar direto para o repository, o control
         return  parkingSpotRepository.existsByApartmentAndBlock(apartment,block);
     }
 
-    public List<ParkingSpotModel> findAll() {
-        return  parkingSpotRepository.findAll();//retorna a listagem completa de ParkingSpotModel
+    public Page<ParkingSpotModel> findAll(Pageable pageable) {
+        return  parkingSpotRepository.findAll(pageable);//retornava a listagem completa de ParkingSpotModel
+        // passou a retornar uma página, onde add os parâmetros e mudou o retorno de list para page.
     }
 
     public Optional<ParkingSpotModel> findById(UUID id) {
